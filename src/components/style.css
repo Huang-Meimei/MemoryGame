@@ -1,0 +1,24 @@
+
+/*      Dashboard Css       */
+.dashboard {
+    padding:10px;
+    margin:100px;
+    overflow:hidden;
+    border-color:#000;
+    border-width:medium;
+    border-style:dashed
+}
+/*      Card Css       */
+.flipper-container{
+    padding:10px;
+    width:100px;
+    height:100px; 
+    display:inline-block;
+}
+.card {
+    width:100px;
+    height:100px; 
+    display:inline-block;
+    background-repeat:no-repeat; 
+
+}
