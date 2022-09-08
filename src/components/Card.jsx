@@ -1,63 +1,57 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import style from './style.css'
 import { connect } from 'react-redux';
-import { flipAction } from '../redux/actions/CardActions';
-import { storeFlippedAction, matchAction } from '../redux/actions/BoardAction';
+import { match } from '../redux/slice/dashBoard';
+import style from './style.css'
 
 class Card extends React.Component {
 
     constructor(props){
         super(props);
-        this.state={
-            position:props.position,
-            type:props.type,
-            img:props.img,
+        this.state = {
+            position: props.position,
+            type: props.type,
+            // img: props.img,
+            img: require(`../img/${props.img}.png`),
             img0 : require('../img/cover.png'),
             matched : false,
             flipped : false,
         }
-    }  
+    }
 
     onClick = () =>{
-        if ((!this.state.flipped)&&(!this.state.matched)){
-            this.props.flipAction({
-                position:this.state.position,
-                img:this.state.img,
-                img0 : this.state.img0,
-                matched : false,
-                flipped : false
-            })
-            console.log(this.props)
-            this.props.storeFlippedAction({
-                position:this.state.position,
-                img:this.state.img,
-                img0 : this.state.img0,
-                matched : false,
-                flipped : false,
-            })
-            this.props.matchAction()
+        const { flipped, matched } = this.state;
+        const { dashBoard: { currentFlippedList = [] } } = this.props;
+        if (!flipped && !matched){
+            const currentCardInfo = {
+                position: this.state.position,
+                img: this.state.img,
+                img0: this.state.img0,
+                matched: false,
+                flipped: false
+            }
+            if(currentFlippedList.length < 2){
+                this.props.match(currentCardInfo);
+                this.setState({
+                    flipped: true,
+                })
+            }
         }
-        return
     }
 
     render() {
+        const { dashBoard, dashBoard: { currentFlippedList = [] } } = this.props;
+        const { img, img0, flipped } = this.state;
+        const needRecover = currentFlippedList.length === 1;
+
         return(
             <div className='flipper-container' onClick={this.onClick}>
-                <div  className='card'    
-                      style={{backgroundImage:`url('${this.state.img0}')`}}>
-                </div>
+                <div className='card' style={{ backgroundImage: `url('${flipped ? img : img0}')` }} />
             </div>
         )
     }
 }
+
 export default connect(
-    state => ({
-      res: state
-    }),
-    {
-        flipAction,
-        storeFlippedAction,
-        matchAction
-    }
+  state => state,
+  { match }
 )(Card)

@@ -2,13 +2,16 @@ import logo from './logo.svg';
 import './App.css';
 import Card from './components/Card'
 import Dashboard from './components/Dashboard';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 function App() {
   return (
-    <div>
-      <Dashboard num='5' size='25'>
-      </Dashboard>
-    </div>
+    <Provider store={store}>
+      <div>
+        <Dashboard num='5' size='25' />
+      </div>
+    </Provider>
   );
 }
 
